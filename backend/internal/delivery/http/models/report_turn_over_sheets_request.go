@@ -15,10 +15,10 @@ import (
 	"github.com/go-openapi/validate"
 )
 
-// ReportTurnOverByManyAccountsRequest report turn over by many accounts request
+// ReportTurnOverSheetsRequest report turn over sheets request
 //
-// swagger:model ReportTurnOverByManyAccountsRequest
-type ReportTurnOverByManyAccountsRequest struct {
+// swagger:model ReportTurnOverSheetsRequest
+type ReportTurnOverSheetsRequest struct {
 
 	// account ids
 	// Required: true
@@ -32,8 +32,8 @@ type ReportTurnOverByManyAccountsRequest struct {
 	Year int64 `json:"year"`
 }
 
-// Validate validates this report turn over by many accounts request
-func (m *ReportTurnOverByManyAccountsRequest) Validate(formats strfmt.Registry) error {
+// Validate validates this report turn over sheets request
+func (m *ReportTurnOverSheetsRequest) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validateAccountIds(formats); err != nil {
@@ -50,7 +50,7 @@ func (m *ReportTurnOverByManyAccountsRequest) Validate(formats strfmt.Registry) 
 	return nil
 }
 
-func (m *ReportTurnOverByManyAccountsRequest) validateAccountIds(formats strfmt.Registry) error {
+func (m *ReportTurnOverSheetsRequest) validateAccountIds(formats strfmt.Registry) error {
 
 	if err := validate.Required("account_ids", "body", m.AccountIds); err != nil {
 		return err
@@ -73,7 +73,7 @@ func (m *ReportTurnOverByManyAccountsRequest) validateAccountIds(formats strfmt.
 	return nil
 }
 
-func (m *ReportTurnOverByManyAccountsRequest) validateYear(formats strfmt.Registry) error {
+func (m *ReportTurnOverSheetsRequest) validateYear(formats strfmt.Registry) error {
 
 	if err := validate.Required("year", "body", int64(m.Year)); err != nil {
 		return err
@@ -90,13 +90,13 @@ func (m *ReportTurnOverByManyAccountsRequest) validateYear(formats strfmt.Regist
 	return nil
 }
 
-// ContextValidate validates this report turn over by many accounts request based on context it is used
-func (m *ReportTurnOverByManyAccountsRequest) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+// ContextValidate validates this report turn over sheets request based on context it is used
+func (m *ReportTurnOverSheetsRequest) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }
 
 // MarshalBinary interface implementation
-func (m *ReportTurnOverByManyAccountsRequest) MarshalBinary() ([]byte, error) {
+func (m *ReportTurnOverSheetsRequest) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
@@ -104,8 +104,8 @@ func (m *ReportTurnOverByManyAccountsRequest) MarshalBinary() ([]byte, error) {
 }
 
 // UnmarshalBinary interface implementation
-func (m *ReportTurnOverByManyAccountsRequest) UnmarshalBinary(b []byte) error {
-	var res ReportTurnOverByManyAccountsRequest
+func (m *ReportTurnOverSheetsRequest) UnmarshalBinary(b []byte) error {
+	var res ReportTurnOverSheetsRequest
 	if err := swag.ReadJSON(b, &res); err != nil {
 		return err
 	}

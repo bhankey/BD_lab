@@ -14,13 +14,13 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// ReportTurnOverByManyAccountsResponse report turn over by many accounts response
+// ReportTurnOverSheetsResponse report turn over sheets response
 //
-// swagger:model ReportTurnOverByManyAccountsResponse
-type ReportTurnOverByManyAccountsResponse []*ReportTurnOverResponse
+// swagger:model ReportTurnOverSheetsResponse
+type ReportTurnOverSheetsResponse []*ReportTurnOverSheetsResponseItem
 
-// Validate validates this report turn over by many accounts response
-func (m ReportTurnOverByManyAccountsResponse) Validate(formats strfmt.Registry) error {
+// Validate validates this report turn over sheets response
+func (m ReportTurnOverSheetsResponse) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	for i := 0; i < len(m); i++ {
@@ -47,8 +47,8 @@ func (m ReportTurnOverByManyAccountsResponse) Validate(formats strfmt.Registry) 
 	return nil
 }
 
-// ContextValidate validate this report turn over by many accounts response based on the context it is used
-func (m ReportTurnOverByManyAccountsResponse) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+// ContextValidate validate this report turn over sheets response based on the context it is used
+func (m ReportTurnOverSheetsResponse) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
 	for i := 0; i < len(m); i++ {

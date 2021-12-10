@@ -15,10 +15,10 @@ import (
 	"github.com/go-openapi/validate"
 )
 
-// ReportTurnOverResponse report turn over response
+// ReportTurnOverSheetsResponseItem report turn over sheets response item
 //
-// swagger:model ReportTurnOverResponse
-type ReportTurnOverResponse struct {
+// swagger:model ReportTurnOverSheetsResponseItem
+type ReportTurnOverSheetsResponseItem struct {
 
 	// account id
 	// Minimum: 1
@@ -36,8 +36,8 @@ type ReportTurnOverResponse struct {
 	StartSum float64 `json:"start_sum"`
 }
 
-// Validate validates this report turn over response
-func (m *ReportTurnOverResponse) Validate(formats strfmt.Registry) error {
+// Validate validates this report turn over sheets response item
+func (m *ReportTurnOverSheetsResponseItem) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validateAccountID(formats); err != nil {
@@ -54,7 +54,7 @@ func (m *ReportTurnOverResponse) Validate(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *ReportTurnOverResponse) validateAccountID(formats strfmt.Registry) error {
+func (m *ReportTurnOverSheetsResponseItem) validateAccountID(formats strfmt.Registry) error {
 	if swag.IsZero(m.AccountID) { // not required
 		return nil
 	}
@@ -66,7 +66,7 @@ func (m *ReportTurnOverResponse) validateAccountID(formats strfmt.Registry) erro
 	return nil
 }
 
-func (m *ReportTurnOverResponse) validateMonthReport(formats strfmt.Registry) error {
+func (m *ReportTurnOverSheetsResponseItem) validateMonthReport(formats strfmt.Registry) error {
 	if swag.IsZero(m.MonthReport) { // not required
 		return nil
 	}
@@ -102,8 +102,8 @@ func (m *ReportTurnOverResponse) validateMonthReport(formats strfmt.Registry) er
 	return nil
 }
 
-// ContextValidate validate this report turn over response based on the context it is used
-func (m *ReportTurnOverResponse) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+// ContextValidate validate this report turn over sheets response item based on the context it is used
+func (m *ReportTurnOverSheetsResponseItem) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.contextValidateMonthReport(ctx, formats); err != nil {
@@ -116,7 +116,7 @@ func (m *ReportTurnOverResponse) ContextValidate(ctx context.Context, formats st
 	return nil
 }
 
-func (m *ReportTurnOverResponse) contextValidateMonthReport(ctx context.Context, formats strfmt.Registry) error {
+func (m *ReportTurnOverSheetsResponseItem) contextValidateMonthReport(ctx context.Context, formats strfmt.Registry) error {
 
 	for i := 0; i < len(m.MonthReport); i++ {
 
@@ -137,7 +137,7 @@ func (m *ReportTurnOverResponse) contextValidateMonthReport(ctx context.Context,
 }
 
 // MarshalBinary interface implementation
-func (m *ReportTurnOverResponse) MarshalBinary() ([]byte, error) {
+func (m *ReportTurnOverSheetsResponseItem) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
@@ -145,8 +145,8 @@ func (m *ReportTurnOverResponse) MarshalBinary() ([]byte, error) {
 }
 
 // UnmarshalBinary interface implementation
-func (m *ReportTurnOverResponse) UnmarshalBinary(b []byte) error {
-	var res ReportTurnOverResponse
+func (m *ReportTurnOverSheetsResponseItem) UnmarshalBinary(b []byte) error {
+	var res ReportTurnOverSheetsResponseItem
 	if err := swag.ReadJSON(b, &res); err != nil {
 		return err
 	}

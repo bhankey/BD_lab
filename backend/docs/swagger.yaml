@@ -47,8 +47,7 @@ paths:
           schema:
             $ref: '#/definitions/BaseResponse'
 
-  # May be only turnover_sheet_by_account_ids
-  /report/turnover_sheet:
+  /report/turnover_sheets:
     post:
       tags:
         - report
@@ -56,27 +55,12 @@ paths:
         - in: body
           name: body
           schema:
-            $ref: '#/definitions/ReportTurnOverRequest'
+            $ref: '#/definitions/ReportTurnOverSheetsRequest'
       responses:
         200:
           description: OK
           schema:
-            $ref: '#/definitions/ReportTurnOverResponse'
-
-  /report/turnover_sheet_by_account_ids:
-    post:
-      tags:
-        - report
-      parameters:
-        - in: body
-          name: body
-          schema:
-            $ref: '#/definitions/ReportTurnOverByManyAccountsRequest'
-      responses:
-        200:
-          description: OK
-          schema:
-            $ref: '#/definitions/ReportTurnOverByManyAccountsResponse'
+            $ref: '#/definitions/ReportTurnOverSheetsResponse'
 
   /report/debtors:
     post:
@@ -141,23 +125,7 @@ definitions:
         type: boolean
         x-omitempty: false
 
-  ReportTurnOverRequest:
-    type: object
-    required:
-      - account_id
-      - year
-    properties:
-      account_id:
-        type: integer
-        x-nullable: false
-        minimum: 1
-      year:
-        type: integer
-        x-nullable: false
-        minimum: 2000
-        maximum: 4000
-
-  ReportTurnOverByManyAccountsRequest:
+  ReportTurnOverSheetsRequest:
     type: object
     required:
       - account_ids
@@ -177,13 +145,13 @@ definitions:
         minimum: 2000
         maximum: 4000
 
-  ReportTurnOverByManyAccountsResponse:
+  ReportTurnOverSheetsResponse:
     type: array
     items:
-      $ref: '#/definitions/ReportTurnOverResponse'
+      $ref: '#/definitions/ReportTurnOverSheetsResponseItem'
       x-omitempty: false
 
-  ReportTurnOverResponse:
+  ReportTurnOverSheetsResponseItem:
     type: object
     properties:
       start_sum:
