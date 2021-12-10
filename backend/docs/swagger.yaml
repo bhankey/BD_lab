@@ -233,13 +233,15 @@ definitions:
 
   ReportDebtorsResponse:
     type: array
-    properties:
-      income:
-        type: number
-        x-omitempty: false
-      outgo:
-        type: number
-        x-omitempty: false
-      debt_sum:
-        type: number
-        x-omitempty: false
+    items:
+      type: object
+      properties:
+        income:
+          type: number
+          x-omitempty: false
+        outgo:
+          type: number
+          x-omitempty: false
+        debt_sum:
+          type: number
+          x-omitempty: false
