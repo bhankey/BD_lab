@@ -1,0 +1,1 @@
+swagger generate model -f ./docs/swagger.yaml -m ./internal/delivery/http/models

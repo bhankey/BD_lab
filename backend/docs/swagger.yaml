@@ -1,0 +1,245 @@
+swagger: "2.0"
+info:
+  description: finanse
+  title: finanse
+  version: 1.0.0
+consumes:
+  - application/io.goswagger.examples.todo-list.v1+json
+produces:
+  - application/io.goswagger.examples.todo-list.v1+json
+schemes:
+  - http
+tags:
+  - name: payments
+    description: Payments
+  - name: account
+    description: User bank account
+  - name: report
+    description: report
+paths:
+  /payments/create:
+    post:
+      tags:
+        - payments
+      parameters:
+        - in: body
+          name: body
+          schema:
+            $ref: '#/definitions/Payment'
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/BaseResponse'
+
+  /account/create:
+    post:
+      tags:
+        - account
+      parameters:
+        - in: body
+          name: body
+          schema:
+            $ref: '#/definitions/Account'
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/BaseResponse'
+
+  # May be only turnover_sheet_by_account_ids
+  /report/turnover_sheet:
+    post:
+      tags:
+        - report
+      parameters:
+        - in: body
+          name: body
+          schema:
+            $ref: '#/definitions/ReportTurnOverRequest'
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/ReportTurnOverResponse'
+
+  /report/turnover_sheet_by_account_ids:
+    post:
+      tags:
+        - report
+      parameters:
+        - in: body
+          name: body
+          schema:
+            $ref: '#/definitions/ReportTurnOverByManyAccountsRequest'
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/ReportTurnOverByManyAccountsResponse'
+
+  /report/debtors:
+    post:
+      tags:
+        - report
+      parameters:
+        - in: body
+          name: body
+          schema:
+            $ref: ''
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: ''
+
+definitions:
+  Payment:
+    type: object
+    required:
+      - account_id
+    properties:
+      account_id:
+        type: integer
+        x-nullable: false
+        minimum: 1
+      sum:
+        type: number
+      reason:
+        type: string
+        x-nullable: false
+        minLength: 1
+
+  Account:
+    type: object
+    required:
+      - name
+      - sum
+    properties:
+      user_id:
+        description: 'not used now'
+        type: integer
+        x-nullable: false
+        minimum: 1
+      name:
+        type: string
+        x-nullable: false
+        minLength: 1
+      sum:
+        type: number
+        x-nullable: false
+        minimum: 0
+        default: 0
+
+  BaseResponse:
+    type: object
+    properties:
+      error:
+        type: string
+        x-omitempty: false
+      success:
+        type: boolean
+        x-omitempty: false
+
+  ReportTurnOverRequest:
+    type: object
+    required:
+      - account_id
+      - year
+    properties:
+      account_id:
+        type: integer
+        x-nullable: false
+        minimum: 1
+      year:
+        type: integer
+        x-nullable: false
+        minimum: 2000
+        maximum: 4000
+
+  ReportTurnOverByManyAccountsRequest:
+    type: object
+    required:
+      - account_ids
+      - year
+    properties:
+      account_ids:
+        type: array
+        x-nullable: false
+        minItems: 1
+        items:
+          type: integer
+          x-nullable: false
+          minimum: 1
+      year:
+        type: integer
+        x-nullable: false
+        minimum: 2000
+        maximum: 4000
+
+  ReportTurnOverByManyAccountsResponse:
+    type: array
+    items:
+      $ref: '#/definitions/ReportTurnOverResponse'
+      x-omitempty: false
+
+  ReportTurnOverResponse:
+    type: object
+    properties:
+      start_sum:
+        type: number
+        x-omitempty: false
+      end_sum:
+        type: number
+        x-omitempty: false
+      account_id:
+        type: integer
+        x-omitempty: false
+        minimum: 1
+      month_report:
+        type: array
+        x-omitempty: false
+        minItems: 12
+        maxItems: 12
+        items:
+          $ref: '#/definitions/ReportTurnOverByMonth'
+          x-omitempty: false
+
+  ReportTurnOverByMonth:
+    type: object
+    properties:
+      income:
+        type: number
+        x-omitempty: false
+      outgo:
+        type: number
+        x-omitempty: false
+      sum:
+        type: number
+        x-omitempty: false
+
+  ReportDebtorsRequest:
+    type: object
+    properties:
+      date:
+        x-nullable: false
+        type: string
+      account_ids:
+        type: array
+        x-nullable: false
+        items:
+          x-nullable: false
+          type: integer
+
+  ReportDebtorsResponse:
+    type: array
+    properties:
+      income:
+        type: number
+        x-omitempty: false
+      outgo:
+        type: number
+        x-omitempty: false
+      debt_sum:
+        type: number
+        x-omitempty: false
