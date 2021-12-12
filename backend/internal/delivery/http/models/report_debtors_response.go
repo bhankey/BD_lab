@@ -77,6 +77,9 @@ func (m ReportDebtorsResponse) ContextValidate(ctx context.Context, formats strf
 // swagger:model ReportDebtorsResponseItems0
 type ReportDebtorsResponseItems0 struct {
 
+	// account id
+	AccountID int64 `json:"account_id"`
+
 	// debt sum
 	DebtSum float64 `json:"debt_sum"`
 

@@ -19,9 +19,6 @@ type ReportDebtorsRequest struct {
 
 	// account ids
 	AccountIds []int64 `json:"account_ids"`
-
-	// date
-	Date string `json:"date,omitempty"`
 }
 
 // Validate validates this report debtors request

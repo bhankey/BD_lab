@@ -8,7 +8,7 @@ postgres:
   port: 5432
   user: "postgres"
   password: "postgres"
-  db_name: "todoList"
+  db_name: "finance"
 redis:
   host: "localhost"
   port: 6379

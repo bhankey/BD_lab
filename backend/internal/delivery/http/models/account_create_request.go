@@ -14,38 +14,26 @@ import (
 	"github.com/go-openapi/validate"
 )
 
-// Account account
+// AccountCreateRequest account create request
 //
-// swagger:model Account
-type Account struct {
-
-	// id
-	ID int64 `json:"id"`
+// swagger:model AccountCreateRequest
+type AccountCreateRequest struct {
 
 	// name
 	// Required: true
 	// Min Length: 1
 	Name string `json:"name"`
 
-	// sum
-	// Required: true
-	// Minimum: 0
-	Sum float64 `json:"sum"`
-
 	// not used now
 	// Minimum: 1
-	UserID int64 `json:"user_id"`
+	UserID int64 `json:"user_id,omitempty"`
 }
 
-// Validate validates this account
-func (m *Account) Validate(formats strfmt.Registry) error {
+// Validate validates this account create request
+func (m *AccountCreateRequest) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validateName(formats); err != nil {
-		res = append(res, err)
-	}
-
-	if err := m.validateSum(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -59,7 +47,7 @@ func (m *Account) Validate(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *Account) validateName(formats strfmt.Registry) error {
+func (m *AccountCreateRequest) validateName(formats strfmt.Registry) error {
 
 	if err := validate.RequiredString("name", "body", m.Name); err != nil {
 		return err
@@ -72,20 +60,7 @@ func (m *Account) validateName(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *Account) validateSum(formats strfmt.Registry) error {
-
-	if err := validate.Required("sum", "body", float64(m.Sum)); err != nil {
-		return err
-	}
-
-	if err := validate.Minimum("sum", "body", m.Sum, 0, false); err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func (m *Account) validateUserID(formats strfmt.Registry) error {
+func (m *AccountCreateRequest) validateUserID(formats strfmt.Registry) error {
 	if swag.IsZero(m.UserID) { // not required
 		return nil
 	}
@@ -97,13 +72,13 @@ func (m *Account) validateUserID(formats strfmt.Registry) error {
 	return nil
 }
 
-// ContextValidate validates this account based on context it is used
-func (m *Account) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+// ContextValidate validates this account create request based on context it is used
+func (m *AccountCreateRequest) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }
 
 // MarshalBinary interface implementation
-func (m *Account) MarshalBinary() ([]byte, error) {
+func (m *AccountCreateRequest) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
@@ -111,8 +86,8 @@ func (m *Account) MarshalBinary() ([]byte, error) {
 }
 
 // UnmarshalBinary interface implementation
-func (m *Account) UnmarshalBinary(b []byte) error {
-	var res Account
+func (m *AccountCreateRequest) UnmarshalBinary(b []byte) error {
+	var res AccountCreateRequest
 	if err := swag.ReadJSON(b, &res); err != nil {
 		return err
 	}

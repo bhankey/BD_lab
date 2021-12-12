@@ -17,6 +17,8 @@ tags:
   - name: report
     description: report
 paths:
+
+  # PAYMENTS
   /payments/create:
     post:
       tags:
@@ -32,22 +34,46 @@ paths:
           schema:
             $ref: '#/definitions/BaseResponse'
 
+# TODO really need???
+  /payments/get_client_payments:
+    get:
+      tags:
+        - payments
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/PaymentsGetAllResponse'
+
+  # ACCOUNT
   /account/create:
     post:
       tags:
-        - account
+        - accountservice
       parameters:
         - in: body
           name: body
           schema:
-            $ref: '#/definitions/Account'
+            $ref: '#/definitions/AccountCreateRequest'
       responses:
         200:
           description: OK
           schema:
             $ref: '#/definitions/BaseResponse'
 
-  /report/turnover_sheets:
+  /account/get_all:
+    get:
+      tags:
+        - account
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/AccountGetAllResponse'
+
+
+  # REPORTS
+  /reports/turnover_sheets:
     post:
       tags:
         - report
@@ -70,12 +96,12 @@ paths:
         - in: body
           name: body
           schema:
-            $ref: ''
+            $ref: '#/definitions/ReportDebtorsRequest'
       responses:
         200:
           description: OK
           schema:
-            $ref: ''
+            $ref: '#/definitions/ReportDebtorsResponse'
 
 definitions:
   Payment:
@@ -100,6 +126,32 @@ definitions:
       - name
       - sum
     properties:
+      id:
+        type: integer
+        x-omitempty: false
+      user_id:
+        description: 'not used now'
+        type: integer
+        x-nullable: false
+        minimum: 1
+        x-omitempty: false
+      name:
+        type: string
+        x-nullable: false
+        x-omitempty: false
+        minLength: 1
+      sum:
+        type: number
+        x-nullable: false
+        x-omitempty: false
+        minimum: 0
+        default: 0
+
+  AccountCreateRequest:
+    type: object
+    required:
+      - name
+    properties:
       user_id:
         description: 'not used now'
         type: integer
@@ -109,11 +161,6 @@ definitions:
         type: string
         x-nullable: false
         minLength: 1
-      sum:
-        type: number
-        x-nullable: false
-        minimum: 0
-        default: 0
 
   BaseResponse:
     type: object
@@ -133,14 +180,17 @@ definitions:
     properties:
       account_ids:
         type: array
+        format: int
         x-nullable: false
         minItems: 1
         items:
           type: integer
+          format: int
           x-nullable: false
           minimum: 1
       year:
         type: integer
+        format: int
         x-nullable: false
         minimum: 2000
         maximum: 4000
@@ -162,6 +212,7 @@ definitions:
         x-omitempty: false
       account_id:
         type: integer
+        format: int
         x-omitempty: false
         minimum: 1
       month_report:
@@ -189,9 +240,6 @@ definitions:
   ReportDebtorsRequest:
     type: object
     properties:
-      date:
-        x-nullable: false
-        type: string
       account_ids:
         type: array
         x-nullable: false
@@ -204,6 +252,9 @@ definitions:
     items:
       type: object
       properties:
+        account_id:
+          type: integer
+          x-omitempty: false
         income:
           type: number
           x-omitempty: false
@@ -213,3 +264,14 @@ definitions:
         debt_sum:
           type: number
           x-omitempty: false
+
+  PaymentsGetAllResponse:
+    type: array
+    items:
+      $ref: '#/definitions/Payment'
+
+  AccountGetAllResponse:
+    type: array
+    x-omitempty: false
+    items:
+      $ref: '#/definitions/Account'
