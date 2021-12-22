@@ -21,7 +21,6 @@ import (
 type ReportTurnOverSheetsRequest struct {
 
 	// account ids
-	// Required: true
 	// Min Items: 1
 	AccountIds []int64 `json:"account_ids"`
 
@@ -51,9 +50,8 @@ func (m *ReportTurnOverSheetsRequest) Validate(formats strfmt.Registry) error {
 }
 
 func (m *ReportTurnOverSheetsRequest) validateAccountIds(formats strfmt.Registry) error {
-
-	if err := validate.Required("account_ids", "body", m.AccountIds); err != nil {
-		return err
+	if swag.IsZero(m.AccountIds) { // not required
+		return nil
 	}
 
 	iAccountIdsSize := int64(len(m.AccountIds))

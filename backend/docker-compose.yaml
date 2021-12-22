@@ -36,5 +36,5 @@ services:
         [ "-path", "/database", "-database", "postgres://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgres}@postgres:5432/finance?sslmode=disable", "${MIGRATIONS_STATUS:-up}"]
 
 volumes:
-  mysql:
+  postgres:
   redis:

@@ -19,6 +19,9 @@ import (
 // swagger:model Account
 type Account struct {
 
+	// id
+	ID int64 `json:"id"`
+
 	// name
 	// Required: true
 	// Min Length: 1
@@ -31,7 +34,7 @@ type Account struct {
 
 	// not used now
 	// Minimum: 1
-	UserID int64 `json:"user_id,omitempty"`
+	UserID int64 `json:"user_id"`
 }
 
 // Validate validates this account
