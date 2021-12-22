@@ -20,6 +20,7 @@ func init() {
 func main() {
 	var configPath string
 	flag.StringVar(&configPath, "config-path", "config/config.yaml", "path to configuration file")
+	logger.Init()
 
 	l := logger.GetLogger()
 	l.Infoln("logger initialized")

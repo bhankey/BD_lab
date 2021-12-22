@@ -10,6 +10,19 @@ import (
 func (s *ReportService) GetTurnOverSheets(ctx context.Context, accountIDs []int, year int) ([]reportentities.TurnOverReport, error) {
 	report := make([]reportentities.TurnOverReport, 0)
 
+	if len(accountIDs) == 0 {
+		accounts, err := s.accountRepo.GetAll(ctx)
+		if err != nil {
+			return nil, err
+		}
+
+		accountIDs = make([]int, 0, len(accounts))
+		for _, account := range accounts {
+			accountIDs = append(accountIDs, account.ID)
+		}
+
+	}
+
 	for _, accountID := range accountIDs {
 		payments, err := s.paymentsRepo.GetByAccountID(ctx, accountID, year)
 		if err != nil {
@@ -17,7 +30,7 @@ func (s *ReportService) GetTurnOverSheets(ctx context.Context, accountIDs []int,
 		}
 
 		if len(payments) == 0 {
-			s.Logger.Warn("reportservice.GetTurnOverSheets.accountWithoutPaymentsForYear", accountID)
+			s.Logger.WithField("account_id", accountID).Warn("reportservice.GetTurnOverSheets.accountWithoutPaymentsForYear", accountID)
 
 			continue
 		}

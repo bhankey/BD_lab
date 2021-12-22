@@ -43,24 +43,32 @@ func (r *AccountRepo) Create(ctx context.Context, name string, userID int) error
 	return nil
 }
 
-func (r *AccountRepo) Update(ctx context.Context, a accountentities.Account) error {
+func (r *AccountRepo) Update(ctx context.Context, accountID int, name string) error {
 	const query = `
 		UPDATE account 
-			SET name = :name,
-			    user_id = :user_id,
-			    is_show = :is_show
-		WHERE id = :id
+			SET name = $1
+		WHERE id = $2
 `
 
-	row := account{
-		ID:     a.ID,
-		Name:   a.Name,
-		UserID: a.UserID,
-		IsShow: a.IsShow,
+	if _, err := r.db.ExecContext(ctx, query, name, accountID); err != nil {
+		r.Logger.Error("accountrepo.Update.QueryError")
+
+		return err
 	}
 
-	if _, err := r.db.NamedExecContext(ctx, query, row); err != nil {
-		r.Logger.Error("accountrepo.Update.QueryError")
+	return nil
+}
+
+func (r *AccountRepo) Delete(ctx context.Context, accountID int) error {
+	const query = `
+		UPDATE account 
+			SET is_show = false
+		WHERE id = $1
+`
+
+
+	if _, err := r.db.ExecContext(ctx, query, accountID); err != nil {
+		r.Logger.Error("accountrepo.Delete.QueryError")
 
 		return err
 	}

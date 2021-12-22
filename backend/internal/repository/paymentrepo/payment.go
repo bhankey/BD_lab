@@ -91,3 +91,112 @@ func (r *PaymentsRepo) GetByAccountID(ctx context.Context, accountID int, year i
 
 	return result, nil
 }
+
+
+func (r *PaymentsRepo) GetAll(ctx context.Context) ([]paymententities.Payment, error) {
+	const query = `
+		SELECT 
+			id,
+		    account_id,
+		    reason,
+		    sum,
+		    date
+		FROM payments
+		ORDER BY date 
+`
+
+	rows := make([]payment, 0)
+	if err := r.db.SelectContext(ctx, &rows, query); err != nil {
+		r.Logger.Error("paymentrepo.GetByAccountID.QueryError")
+
+		return nil, err
+	}
+
+	result := make([]paymententities.Payment, 0, len(rows))
+	for _, row := range rows {
+		result = append(result, paymententities.Payment{
+			ID:        row.ID,
+			AccountID: row.AccountID,
+			Reason:    row.Reason,
+			Sum:       row.Sum,
+			Date:      row.Date,
+		})
+	}
+
+	return result, nil
+}
+
+func (r *PaymentsRepo) GetClientPayments(ctx context.Context, accountID int) ([]paymententities.Payment, error) {
+	const query = `
+		SELECT 
+			id,
+		    account_id,
+		    reason,
+		    sum,
+		    date
+		FROM payments
+		WHERE account_id = $1
+		ORDER BY date 
+`
+
+	rows := make([]payment, 0)
+	if err := r.db.SelectContext(ctx, &rows, query, accountID); err != nil {
+		r.Logger.Error("paymentrepo.GetByAccountID.QueryError")
+
+		return nil, err
+	}
+
+	result := make([]paymententities.Payment, 0, len(rows))
+	for _, row := range rows {
+		result = append(result, paymententities.Payment{
+			ID:        row.ID,
+			AccountID: row.AccountID,
+			Reason:    row.Reason,
+			Sum:       row.Sum,
+			Date:      row.Date,
+		})
+	}
+
+	return result, nil
+}
+
+func (r *PaymentsRepo) GetClientsPayments(ctx context.Context, accountIDs []int) ([]paymententities.Payment, error) {
+	const query = `
+		SELECT 
+			id,
+		    account_id,
+		    reason,
+		    sum,
+		    date
+		FROM payments
+		WHERE account_id IN (?)
+		ORDER BY date 
+`
+
+	resultingQuery, params, err := sqlx.In(query, accountIDs)
+	if err != nil {
+		return nil, err
+	}
+
+	resultingQuery = r.db.Rebind(resultingQuery)
+	rows := make([]payment, 0)
+	if err := r.db.SelectContext(ctx, &rows, resultingQuery, params...); err != nil {
+		r.Logger.Error("accountrepo.GetDebtors.QueryError")
+
+		return nil, err
+	}
+
+	result := make([]paymententities.Payment, 0, len(rows))
+	for _, row := range rows {
+		result = append(result, paymententities.Payment{
+			ID:        row.ID,
+			AccountID: row.AccountID,
+			Reason:    row.Reason,
+			Sum:       row.Sum,
+			Date:      row.Date,
+		})
+	}
+
+	return result, nil
+}
+

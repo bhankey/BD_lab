@@ -16,13 +16,15 @@ type PaymentHandler struct {
 func NewPaymentHandler(baseHandler *deliveryhttp.BaseHandler, paymentService *paymentsservice.PaymentsService) *PaymentHandler {
 	router := chi.NewRouter()
 
-	accountHandler := &PaymentHandler{
+	paymentHandler := &PaymentHandler{
 		Router:          router,
 		BaseHandler:     baseHandler,
 		paymentsService: paymentService,
 	}
 
-	router.Post("/create", accountHandler.create())
+	router.Post("/create", paymentHandler.create())
+	router.Get("/get_all", paymentHandler.getAll())
+	router.Post("/get_client_payments", paymentHandler.getClientPayments())
 
-	return accountHandler
+	return paymentHandler
 }

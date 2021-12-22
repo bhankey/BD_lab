@@ -18,6 +18,7 @@ import (
 	"finance/internal/service/reportservice"
 	"finance/pkg/logger"
 	"github.com/go-chi/chi/v5"
+	"github.com/go-chi/cors"
 	"net/http"
 	"os"
 	"os/signal"
@@ -62,6 +63,15 @@ func NewApp(configPath string) (*App, error) {
 	swaggerHandler := swaggerhandler.NewSwaggerHandler(baseHandler)
 
 	router := chi.NewRouter()
+
+	router.Use(cors.Handler(cors.Options{
+		AllowedOrigins:   []string{"https://*", "http://*"},
+		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowedHeaders:   []string{"Accept", "Authorization", "Content-Type", "X-CSRF-Token"},
+		ExposedHeaders:   []string{"Link"},
+		AllowCredentials: false,
+		MaxAge:           300, // Maximum value not ignored by any of major browsers
+	}))
 
 	router.Use(func(handler http.Handler) http.Handler {
 		return httphandler.LoggingMiddleware(log)(handler)

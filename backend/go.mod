@@ -4,6 +4,7 @@ go 1.16
 
 require (
 	github.com/go-chi/chi/v5 v5.0.7
+	github.com/go-chi/cors v1.2.0 // indirect
 	github.com/go-openapi/errors v0.20.1
 	github.com/go-openapi/strfmt v0.21.1
 	github.com/go-openapi/swag v0.19.14

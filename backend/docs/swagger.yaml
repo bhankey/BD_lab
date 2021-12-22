@@ -39,6 +39,21 @@ paths:
     get:
       tags:
         - payments
+      parameters:
+        - in: body
+          name: body
+          schema:
+            $ref: '#/definitions/GetClientPaymentsRequest'
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/PaymentsGetAllResponse'
+
+  /payments/get_all:
+    get:
+      tags:
+        - payments
       responses:
         200:
           description: OK
@@ -49,7 +64,7 @@ paths:
   /account/create:
     post:
       tags:
-        - accountservice
+        - account
       parameters:
         - in: body
           name: body
@@ -71,8 +86,38 @@ paths:
           schema:
             $ref: '#/definitions/AccountGetAllResponse'
 
+  /account/update:
+    post:
+      tags:
+        - account
+      parameters:
+        - in: body
+          name: body
+          schema:
+            $ref: '#/definitions/AccountUpdateRequest'
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/BaseResponse'
 
-  # REPORTS
+  /account/delete:
+    delete:
+      tags:
+        - account
+      parameters:
+        - in: body
+          name: body
+          schema:
+            $ref: '#/definitions/AccountDeleteRequest'
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/BaseResponse'
+
+
+        # REPORTS
   /reports/turnover_sheets:
     post:
       tags:
@@ -162,6 +207,31 @@ definitions:
         x-nullable: false
         minLength: 1
 
+  AccountUpdateRequest:
+    type: object
+    required:
+      - account_id
+      - name
+    properties:
+      account_id:
+        type: integer
+        x-nullable: false
+        minimum: 1
+      name:
+        type: string
+        x-nullable: false
+        minLength: 1
+
+  AccountDeleteRequest:
+    type: object
+    required:
+      - account_id
+    properties:
+      account_id:
+        type: integer
+        x-nullable: false
+        minimum: 1
+
   BaseResponse:
     type: object
     properties:
@@ -175,7 +245,6 @@ definitions:
   ReportTurnOverSheetsRequest:
     type: object
     required:
-      - account_ids
       - year
     properties:
       account_ids:
@@ -275,3 +344,10 @@ definitions:
     x-omitempty: false
     items:
       $ref: '#/definitions/Account'
+
+  GetClientPaymentsRequest:
+    type: object
+    properties:
+      account_id:
+        type: integer
+        x-nullable: false

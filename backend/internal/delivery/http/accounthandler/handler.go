@@ -25,6 +25,8 @@ func NewAccountHandler(baseHandler *deliveryhttp.BaseHandler, accountService *ac
 
 	router.Method(http.MethodPost, "/create", accountHandler.create())
 	router.Method(http.MethodGet, "/get_all", accountHandler.getAll())
+	router.Method(http.MethodPost, "/update", accountHandler.update())
+	router.Method(http.MethodDelete, "/delete", accountHandler.delete())
 
 	return accountHandler
 }

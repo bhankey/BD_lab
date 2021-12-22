@@ -22,6 +22,7 @@ type paymentsRepository interface {
 
 type accountRepository interface {
 	GetOne(ctx context.Context, accountID int) (accountentities.Account, error)
+	GetAll(ctx context.Context) ([]accountentities.Account, error)
 	GetDebtors(ctx context.Context, accountIDs []int) ([]accountentities.Account, error)
 	GetAllDebtors(ctx context.Context) ([]accountentities.Account, error)
 }
