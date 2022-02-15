@@ -4,16 +4,15 @@ run:
 linters:
   enable-all: true
   disable:
-    - wsl
-    - interfacer
-    - golint
-    - scopelint
-    - maligned
+    - wsl # don't like)
+    - interfacer  # deprecated
+    - golint  # deprecated
+    - scopelint # deprecated
+    - maligned  # deprecated
     - nolintlint # Better to turn on
     - wrapcheck # Better to turn on
     - exhaustivestruct
     - tagliatelle
-    - goerr113
     - godox  # Better to turn on
 
 linters-settings:
