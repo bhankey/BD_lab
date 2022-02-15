@@ -1,21 +1,25 @@
 package logger
 
 import (
-	"github.com/sirupsen/logrus"
 	"io"
 	"os"
 	"runtime/debug"
+
+	"github.com/sirupsen/logrus"
 )
 
-var e *logrus.Entry
+// nolint: gochecknoglobals
+var e *logrus.Entry // TODO Mustn't be singleton
 
 type Logger struct {
 	*logrus.Entry
 }
 
+// nolint: govet
 func (l *Logger) Error(args ...interface{}) {
 	l.Entry.WithFields(logrus.Fields{
-		"stack": string(debug.Stack())},
+		"stack": string(debug.Stack()),
+	},
 	).Error(args)
 }
 
@@ -29,39 +33,40 @@ func (l *Logger) WithField(key string, value interface{}) *Logger {
 
 const LogLevel = logrus.DebugLevel
 
-// init initialize logger
-func Init() {
-	l := logrus.New()
+const loggerFileSystemRights = os.FileMode(0o755)
 
-	//l.SetReportCaller(true)
-	l.Formatter = &logrus.TextFormatter{
+// Init initialize logger.
+func Init() {
+	log := logrus.New()
+
+	// l.SetReportCaller(true)
+	log.Formatter = &logrus.TextFormatter{
 		FullTimestamp: true,
 	}
 
-	l.SetLevel(LogLevel)
+	log.SetLevel(LogLevel)
 
-	err := os.MkdirAll("logs", 0755)
-	if err != nil || os.IsExist(err) {
-		l.Fatal("can't create log directory:", err)
+	if err := os.MkdirAll("logs", loggerFileSystemRights); err != nil && !os.IsExist(err) {
+		log.Fatal("can't create log directory:", err)
 	}
 
-	logFile, err := os.OpenFile("logs/logs.log", os.O_APPEND|os.O_CREATE|os.O_RDWR, 0755)
+	logFile, err := os.OpenFile("logs/logs.log", os.O_APPEND|os.O_CREATE|os.O_RDWR, loggerFileSystemRights)
 	if err != nil {
-		l.Fatal("can't create log file:", err)
+		log.Fatal("can't create log file:", err)
 	}
 
 	mw := io.MultiWriter(os.Stdout, logFile)
-	l.SetOutput(mw)
-	l.SetLevel(logrus.TraceLevel)
-	e = logrus.NewEntry(l)
+	log.SetOutput(mw)
+	log.SetLevel(logrus.TraceLevel)
+	e = logrus.NewEntry(log)
 }
 
-// GetLogger return standard logger, which was initialize by func init
+// GetLogger return standard logger, which was initialize by func init.
 func GetLogger() Logger {
 	return Logger{e}
 }
 
-//GetLoggerWithField return logger with fields, which was initialize by func init
+// GetLoggerWithField return logger with fields, which was initialize by func init.
 func GetLoggerWithField(f logrus.Fields) Logger {
 	return Logger{e.WithFields(f)}
 }

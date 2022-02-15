@@ -1,12 +1,13 @@
 package config
 
 import (
-	"finance/pkg/logger"
-	"github.com/ilyakaznacheev/cleanenv"
 	"sync"
+
+	"github.com/bhankey/BD_lab/backend/pkg/logger"
+	"github.com/ilyakaznacheev/cleanenv"
 )
 
-// Config struct that depends configuration of App
+// Config struct that depends configuration of App.
 type Config struct {
 	Server struct {
 		Port         string `yaml:"port" env:"PORT" env-default:"8080"`
@@ -28,21 +29,25 @@ type Config struct {
 	}
 }
 
-var instance *Config
+// nolint: gochecknoglobals
+var instance *Config // TODO Mustn't be singleton
+
+// nolint: gochecknoglobals
 var once sync.Once
 
-// GetConfig return pointer to config. Config is singleton
+// GetConfig return pointer to config. Config is singleton.
 func GetConfig(path string) *Config {
 	once.Do(func() {
-		l := logger.GetLogger()
-		l.Infoln("reading server config file")
+		log := logger.GetLogger()
+		log.Infoln("reading server config file")
 		instance = &Config{}
 		if path == "" {
 			path = "./config/config.yaml"
 		}
 		if err := cleanenv.ReadConfig(path, instance); err != nil {
-			l.Fatalln(err)
+			log.Fatalln(err)
 		}
 	})
+
 	return instance
 }

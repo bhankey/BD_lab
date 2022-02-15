@@ -2,9 +2,10 @@ package reportservice
 
 import (
 	"context"
-	"finance/internal/entities/accountentities"
-	"finance/internal/entities/paymententities"
-	"finance/internal/service"
+
+	"github.com/bhankey/BD_lab/backend/internal/entities/accountentities"
+	"github.com/bhankey/BD_lab/backend/internal/entities/paymententities"
+	"github.com/bhankey/BD_lab/backend/internal/service"
 )
 
 type ReportService struct {
@@ -31,7 +32,11 @@ type paymentsHistoryRepository interface {
 	GetPayment(ctx context.Context, accountID int, paymentID int) (paymententities.PaymentHistory, error)
 }
 
-func NewReportService(baseService *service.BaseService, paymentRepo paymentsRepository, paymentsHistoryRepo paymentsHistoryRepository, accountRepo accountRepository) *ReportService {
+func NewReportService(
+	baseService *service.BaseService,
+	paymentRepo paymentsRepository,
+	paymentsHistoryRepo paymentsHistoryRepository,
+	accountRepo accountRepository) *ReportService {
 	return &ReportService{
 		BaseService:         baseService,
 		paymentsRepo:        paymentRepo,

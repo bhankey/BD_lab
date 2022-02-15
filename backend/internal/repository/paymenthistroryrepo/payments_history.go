@@ -4,8 +4,9 @@ import (
 	"context"
 	"database/sql"
 	"errors"
-	"finance/internal/entities/paymententities"
-	"finance/internal/repository"
+
+	"github.com/bhankey/BD_lab/backend/internal/entities/paymententities"
+	"github.com/bhankey/BD_lab/backend/internal/repository"
 	"github.com/jmoiron/sqlx"
 )
 
@@ -45,7 +46,11 @@ func (r *PaymentsHistoryRepo) Create(ctx context.Context, accountID int, payment
 	return nil
 }
 
-func (r *PaymentsHistoryRepo) GetPayment(ctx context.Context, accountID int, paymentID int) (paymententities.PaymentHistory, error) {
+func (r *PaymentsHistoryRepo) GetPayment(
+	ctx context.Context,
+	accountID int,
+	paymentID int,
+) (paymententities.PaymentHistory, error) {
 	const query = `
 		SELECT 
 			id,
@@ -60,7 +65,7 @@ func (r *PaymentsHistoryRepo) GetPayment(ctx context.Context, accountID int, pay
 	row := paymentHistory{}
 	if err := r.db.GetContext(ctx, &row, query, accountID, paymentID); err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
-			return paymententities.PaymentHistory{}, repository.NoEntity
+			return paymententities.PaymentHistory{}, repository.ErrNoEntity
 		}
 		r.Logger.Error("paymenthistoryrepo.GetPayment.QueryError")
 

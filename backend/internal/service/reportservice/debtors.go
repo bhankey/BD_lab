@@ -2,13 +2,15 @@ package reportservice
 
 import (
 	"context"
-	"finance/internal/entities/accountentities"
-	"finance/internal/entities/reportentities"
+
+	"github.com/bhankey/BD_lab/backend/internal/entities/accountentities"
+	"github.com/bhankey/BD_lab/backend/internal/entities/reportentities"
 )
 
 func (s *ReportService) GetDebtors(ctx context.Context, accountIDs []int) ([]reportentities.DebtorsDetails, error) {
 	var err error
-	debtors := make([]accountentities.Account, 0, len(accountIDs))
+
+	var debtors []accountentities.Account
 	if len(accountIDs) == 0 {
 		debtors, err = s.accountRepo.GetAllDebtors(ctx)
 	} else {

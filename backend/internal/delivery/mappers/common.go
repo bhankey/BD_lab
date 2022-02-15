@@ -1,5 +1,6 @@
 package mappers
 
+// nolint: varnamelen
 func SliceInt64ToInt(s []int64) []int {
 	r := make([]int, 0, len(s))
 

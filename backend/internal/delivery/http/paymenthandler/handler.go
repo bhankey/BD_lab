@@ -1,8 +1,8 @@
 package paymentshandler
 
 import (
-	deliveryhttp "finance/internal/delivery/http"
-	"finance/internal/service/paymentsservice"
+	deliveryhttp "github.com/bhankey/BD_lab/backend/internal/delivery/http"
+	"github.com/bhankey/BD_lab/backend/internal/service/paymentsservice"
 	"github.com/go-chi/chi/v5"
 )
 
@@ -13,7 +13,9 @@ type PaymentHandler struct {
 	paymentsService *paymentsservice.PaymentsService
 }
 
-func NewPaymentHandler(baseHandler *deliveryhttp.BaseHandler, paymentService *paymentsservice.PaymentsService) *PaymentHandler {
+func NewPaymentHandler(
+	baseHandler *deliveryhttp.BaseHandler,
+	paymentService *paymentsservice.PaymentsService) *PaymentHandler {
 	router := chi.NewRouter()
 
 	paymentHandler := &PaymentHandler{

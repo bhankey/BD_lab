@@ -2,28 +2,29 @@ package app
 
 import (
 	"context"
-	configinternal "finance/internal/config"
-	httphandler "finance/internal/delivery/http"
-	"finance/internal/delivery/http/accounthandler"
-	paymentshandler "finance/internal/delivery/http/paymenthandler"
-	"finance/internal/delivery/http/reportshandler"
-	"finance/internal/delivery/http/swaggerhandler"
-	"finance/internal/repository"
-	"finance/internal/repository/accountrepo"
-	"finance/internal/repository/paymenthistroryrepo"
-	"finance/internal/repository/paymentrepo"
-	"finance/internal/service"
-	accountservise "finance/internal/service/accountservice"
-	"finance/internal/service/paymentsservice"
-	"finance/internal/service/reportservice"
-	"finance/pkg/logger"
-	"github.com/go-chi/chi/v5"
-	"github.com/go-chi/cors"
 	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
 	"time"
+
+	configinternal "github.com/bhankey/BD_lab/backend/internal/config"
+	httphandler "github.com/bhankey/BD_lab/backend/internal/delivery/http"
+	"github.com/bhankey/BD_lab/backend/internal/delivery/http/accounthandler"
+	paymentshandler "github.com/bhankey/BD_lab/backend/internal/delivery/http/paymenthandler"
+	"github.com/bhankey/BD_lab/backend/internal/delivery/http/reportshandler"
+	"github.com/bhankey/BD_lab/backend/internal/delivery/http/swaggerhandler"
+	"github.com/bhankey/BD_lab/backend/internal/repository"
+	"github.com/bhankey/BD_lab/backend/internal/repository/accountrepo"
+	"github.com/bhankey/BD_lab/backend/internal/repository/paymenthistroryrepo"
+	"github.com/bhankey/BD_lab/backend/internal/repository/paymentrepo"
+	"github.com/bhankey/BD_lab/backend/internal/service"
+	accountservise "github.com/bhankey/BD_lab/backend/internal/service/accountservice"
+	"github.com/bhankey/BD_lab/backend/internal/service/paymentsservice"
+	"github.com/bhankey/BD_lab/backend/internal/service/reportservice"
+	"github.com/bhankey/BD_lab/backend/pkg/logger"
+	"github.com/go-chi/chi/v5"
+	"github.com/go-chi/cors"
 )
 
 type App struct {
@@ -32,21 +33,24 @@ type App struct {
 	logger logger.Logger
 }
 
+const shutDownTimeoutSeconds = 10
+
+// TODO Сделать контейнер, с помощью которого нормально прокидывать зависимости
 func NewApp(configPath string) (*App, error) {
 	config := configinternal.GetConfig(configPath)
 
 	log := logger.GetLogger()
 
-	ds, err := newDataSource(config)
+	dataSources, err := newDataSource(config)
 	if err != nil {
 		return nil, err
 	}
 
 	baseRepository := repository.NewRepository(log)
 
-	accountRepo := accountrepo.NewAccountRepo(baseRepository, ds.db)
-	paymentsRepo := paymentrepo.NewPaymentsRepo(baseRepository, ds.db)
-	paymentsHistoryRepo := paymenthistroryrepo.NewPaymentsHistoryRepo(baseRepository, ds.db)
+	accountRepo := accountrepo.NewAccountRepo(baseRepository, dataSources.db)
+	paymentsRepo := paymentrepo.NewPaymentsRepo(baseRepository, dataSources.db)
+	paymentsHistoryRepo := paymenthistroryrepo.NewPaymentsHistoryRepo(baseRepository, dataSources.db)
 
 	baseService := service.NewService(log)
 
@@ -56,12 +60,14 @@ func NewApp(configPath string) (*App, error) {
 
 	baseHandler := httphandler.NewHandler(log)
 
+	// TODO в хендлерах сделать инверсию зависимостей
 	accountHandler := accounthandler.NewAccountHandler(baseHandler, accountService)
 	paymentsHandler := paymentshandler.NewPaymentHandler(baseHandler, paymentsService)
 	reportsHandler := reportshandler.NewReportsHandler(baseHandler, reportsService)
 
 	swaggerHandler := swaggerhandler.NewSwaggerHandler(baseHandler)
 
+	// TODO куда-то вынести
 	router := chi.NewRouter()
 
 	router.Use(cors.Handler(cors.Options{
@@ -70,7 +76,6 @@ func NewApp(configPath string) (*App, error) {
 		AllowedHeaders:   []string{"Accept", "Authorization", "Content-Type", "X-CSRF-Token"},
 		ExposedHeaders:   []string{"Link"},
 		AllowCredentials: false,
-		MaxAge:           300, // Maximum value not ignored by any of major browsers
 	}))
 
 	router.Use(func(handler http.Handler) http.Handler {
@@ -91,12 +96,11 @@ func NewApp(configPath string) (*App, error) {
 	return &App{
 		logger: log,
 		server: server,
-		ds:     ds,
+		ds:     dataSources,
 	}, nil
 }
 
 func (a *App) Start() {
-
 	a.logger.Info("staring server on port: " + a.server.Addr)
 	go func() {
 		if err := a.server.ListenAndServe(); err != nil {
@@ -109,7 +113,7 @@ func (a *App) Start() {
 	<-quit
 
 	a.logger.Info("received signal to shutdown server")
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), shutDownTimeoutSeconds*time.Second)
 	defer cancel()
 	if err := a.server.Shutdown(ctx); err != nil {
 		a.logger.Error(err)
@@ -117,8 +121,7 @@ func (a *App) Start() {
 
 	<-ctx.Done()
 
-	err := a.ds.close()
-	if err != nil {
+	if err := a.ds.close(); err != nil {
 		a.logger.Error(err)
 	}
 	a.logger.Info("server was shutdown")

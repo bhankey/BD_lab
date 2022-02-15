@@ -2,10 +2,11 @@ package repository
 
 import (
 	"errors"
-	"finance/pkg/logger"
+
+	"github.com/bhankey/BD_lab/backend/pkg/logger"
 )
 
-var NoEntity = errors.New("no entity was found")
+var ErrNoEntity = errors.New("no entity was found")
 
 type BaseRepository struct {
 	Logger logger.Logger

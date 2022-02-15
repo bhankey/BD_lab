@@ -1,15 +1,17 @@
 package main
 
 import (
-	"finance/internal/app"
-	"finance/pkg/logger"
 	"flag"
-	"github.com/joho/godotenv"
 	"log"
 	"math/rand"
 	"time"
+
+	"github.com/bhankey/BD_lab/backend/internal/app"
+	"github.com/bhankey/BD_lab/backend/pkg/logger"
+	"github.com/joho/godotenv"
 )
 
+// nolint: gochecknoinits
 func init() {
 	rand.Seed(time.Now().UnixNano())
 	if err := godotenv.Load(); err != nil {
@@ -22,14 +24,14 @@ func main() {
 	flag.StringVar(&configPath, "config-path", "config/config.yaml", "path to configuration file")
 	logger.Init()
 
-	l := logger.GetLogger()
-	l.Infoln("logger initialized")
+	log := logger.GetLogger()
+	log.Infoln("logger initialized")
 
 	flag.Parse()
 
 	a, err := app.NewApp(configPath)
 	if err != nil {
-		l.Fatal(err)
+		log.Fatal(err)
 	}
 
 	a.Start()

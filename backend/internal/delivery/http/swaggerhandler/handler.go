@@ -1,9 +1,10 @@
 package swaggerhandler
 
 import (
-	deliveryhttp "finance/internal/delivery/http"
-	"github.com/go-chi/chi/v5"
 	"net/http"
+
+	deliveryhttp "github.com/bhankey/BD_lab/backend/internal/delivery/http"
+	"github.com/go-chi/chi/v5"
 )
 
 type SwaggerHandler struct {
@@ -16,11 +17,11 @@ func NewSwaggerHandler(baseHandler *deliveryhttp.BaseHandler) *SwaggerHandler {
 	router := chi.NewRouter()
 
 	initRoutes(router)
+
 	return &SwaggerHandler{
 		Router:      router,
 		BaseHandler: baseHandler,
 	}
-
 }
 
 func initRoutes(router chi.Router) {

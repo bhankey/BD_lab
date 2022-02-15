@@ -2,7 +2,8 @@ package accountrepo
 
 import (
 	"context"
-	"finance/internal/entities/accountentities"
+
+	"github.com/bhankey/BD_lab/backend/internal/entities/accountentities"
 	"github.com/jmoiron/sqlx"
 )
 

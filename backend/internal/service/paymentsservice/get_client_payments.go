@@ -2,7 +2,8 @@ package paymentsservice
 
 import (
 	"context"
-	"finance/internal/entities/paymententities"
+
+	"github.com/bhankey/BD_lab/backend/internal/entities/paymententities"
 )
 
 func (s *PaymentsService) GetClientPayments(ctx context.Context, accountID int) ([]paymententities.Payment, error) {

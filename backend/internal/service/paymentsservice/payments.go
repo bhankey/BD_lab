@@ -2,9 +2,10 @@ package paymentsservice
 
 import (
 	"context"
-	"finance/internal/entities/accountentities"
-	"finance/internal/entities/paymententities"
-	"finance/internal/service"
+
+	"github.com/bhankey/BD_lab/backend/internal/entities/accountentities"
+	"github.com/bhankey/BD_lab/backend/internal/entities/paymententities"
+	"github.com/bhankey/BD_lab/backend/internal/service"
 )
 
 type PaymentsService struct {
@@ -32,7 +33,11 @@ type paymentsHistoryRepository interface {
 	Create(ctx context.Context, accountID int, paymentID int, sumBefore float64) error
 }
 
-func NewPaymentsService(baseService *service.BaseService, paymentRepo paymentsRepository, paymentsHistoryRepo paymentsHistoryRepository, accountRepo accountRepository) *PaymentsService {
+func NewPaymentsService(
+	baseService *service.BaseService,
+	paymentRepo paymentsRepository,
+	paymentsHistoryRepo paymentsHistoryRepository,
+	accountRepo accountRepository) *PaymentsService {
 	return &PaymentsService{
 		BaseService:         baseService,
 		paymentsRepo:        paymentRepo,

@@ -1,10 +1,11 @@
 package reportshandler
 
 import (
-	deliveryhttp "finance/internal/delivery/http"
-	"finance/internal/service/reportservice"
-	"github.com/go-chi/chi/v5"
 	"net/http"
+
+	deliveryhttp "github.com/bhankey/BD_lab/backend/internal/delivery/http"
+	"github.com/bhankey/BD_lab/backend/internal/service/reportservice"
+	"github.com/go-chi/chi/v5"
 )
 
 type ReportsHandler struct {
@@ -14,7 +15,9 @@ type ReportsHandler struct {
 	reportService *reportservice.ReportService
 }
 
-func NewReportsHandler(baseHandler *deliveryhttp.BaseHandler, reportsService *reportservice.ReportService) *ReportsHandler {
+func NewReportsHandler(
+	baseHandler *deliveryhttp.BaseHandler,
+	reportsService *reportservice.ReportService) *ReportsHandler {
 	router := chi.NewRouter()
 
 	accountHandler := &ReportsHandler{

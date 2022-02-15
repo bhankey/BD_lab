@@ -2,9 +2,10 @@ package app
 
 import (
 	"context"
-	"finance/internal/config"
-	"finance/pkg/postgresdb"
 	"fmt"
+
+	"github.com/bhankey/BD_lab/backend/internal/config"
+	"github.com/bhankey/BD_lab/backend/pkg/postgresdb"
 	"github.com/go-redis/redis/v8"
 	"github.com/jmoiron/sqlx"
 )
@@ -15,7 +16,12 @@ type dataSources struct {
 }
 
 func newDataSource(config *config.Config) (*dataSources, error) {
-	db, err := postgresdb.NewClient(config.Postgres.Host, config.Postgres.Port, config.Postgres.User, config.Postgres.Password, config.Postgres.DBName)
+	postgresDB, err := postgresdb.NewClient(
+		config.Postgres.Host,
+		config.Postgres.Port,
+		config.Postgres.User,
+		config.Postgres.Password,
+		config.Postgres.DBName)
 	if err != nil {
 		return nil, err
 	}
@@ -31,7 +37,7 @@ func newDataSource(config *config.Config) (*dataSources, error) {
 	}
 
 	return &dataSources{
-		db:          db,
+		db:          postgresDB,
 		redisClient: rdb,
 	}, nil
 }
