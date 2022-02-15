@@ -4,8 +4,9 @@ import (
 	"context"
 	"database/sql"
 	"errors"
-	"finance/internal/entities/accountentities"
-	"finance/internal/repository"
+
+	"github.com/bhankey/BD_lab/backend/internal/entities/accountentities"
+	"github.com/bhankey/BD_lab/backend/internal/repository"
 	"github.com/jmoiron/sqlx"
 )
 
@@ -66,7 +67,6 @@ func (r *AccountRepo) Delete(ctx context.Context, accountID int) error {
 		WHERE id = $1
 `
 
-
 	if _, err := r.db.ExecContext(ctx, query, accountID); err != nil {
 		r.Logger.Error("accountrepo.Delete.QueryError")
 
@@ -91,7 +91,7 @@ func (r *AccountRepo) GetOne(ctx context.Context, id int) (accountentities.Accou
 	row := account{}
 	if err := r.db.GetContext(ctx, &row, query, id); err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
-			return accountentities.Account{}, repository.NoEntity
+			return accountentities.Account{}, repository.ErrNoEntity
 		}
 		r.Logger.Error("accountrepo.GetOne.QueryError")
 

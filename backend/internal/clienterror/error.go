@@ -14,6 +14,8 @@ type AppError struct {
 	HTTPCode         int    `json:"-"`
 }
 
+var ErrStatusCode = fmt.Errorf("wrong http status code")
+
 func NewAppError(message, code, developerMessage string) *AppError {
 	return &AppError{
 		Err:              fmt.Errorf(message),
@@ -37,9 +39,10 @@ func (ae *AppError) Marshal() ([]byte, error) {
 
 func (ae *AppError) SetHTTPCode(code int) error {
 	if code < 100 || code > 600 {
-		return fmt.Errorf("wrong http status code")
+		return ErrStatusCode
 	}
 	ae.HTTPCode = code
+
 	return nil
 }
 
@@ -47,5 +50,6 @@ func (ae *AppError) GetHTTPCode() int {
 	if ae == nil || ae.HTTPCode == 0 {
 		return http.StatusInternalServerError
 	}
+
 	return ae.HTTPCode
 }

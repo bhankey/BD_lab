@@ -1,7 +1,7 @@
 package service
 
 import (
-	"finance/pkg/logger"
+	"github.com/bhankey/BD_lab/backend/pkg/logger"
 )
 
 type BaseService struct {

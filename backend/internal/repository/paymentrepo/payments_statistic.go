@@ -4,8 +4,9 @@ import (
 	"context"
 	"database/sql"
 	"errors"
-	"finance/internal/entities/paymententities"
-	"finance/internal/repository"
+
+	"github.com/bhankey/BD_lab/backend/internal/entities/paymententities"
+	"github.com/bhankey/BD_lab/backend/internal/repository"
 )
 
 func (r *PaymentsRepo) GetStatistic(ctx context.Context, accountID int) (paymententities.PaymentsStatistic, error) {
@@ -28,7 +29,7 @@ func (r *PaymentsRepo) GetStatistic(ctx context.Context, accountID int) (payment
 
 	if err := r.db.GetContext(ctx, &row, query, accountID); err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
-			return paymententities.PaymentsStatistic{}, repository.NoEntity
+			return paymententities.PaymentsStatistic{}, repository.ErrNoEntity
 		}
 
 		r.Logger.Error("paymentrepo.GetPaymentsStatistic.QueryError")
@@ -43,5 +44,4 @@ func (r *PaymentsRepo) GetStatistic(ctx context.Context, accountID int) (payment
 	}
 
 	return result, nil
-
 }

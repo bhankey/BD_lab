@@ -3,12 +3,13 @@ package reportshandler
 import (
 	"context"
 	"encoding/json"
-	deliveryhttp "finance/internal/delivery/http"
-	"finance/internal/delivery/http/models"
-	"finance/internal/delivery/mappers"
-	"github.com/go-openapi/strfmt"
 	"net/http"
 	"time"
+
+	deliveryhttp "github.com/bhankey/BD_lab/backend/internal/delivery/http"
+	"github.com/bhankey/BD_lab/backend/internal/delivery/http/models"
+	"github.com/bhankey/BD_lab/backend/internal/delivery/mappers"
+	"github.com/go-openapi/strfmt"
 )
 
 func (s *ReportsHandler) getTurnOverReport() http.HandlerFunc {
@@ -43,7 +44,6 @@ func (s *ReportsHandler) getTurnOverReport() http.HandlerFunc {
 
 		resp := make([]*models.ReportTurnOverSheetsResponseItem, 0, len(reports))
 		for _, report := range reports {
-
 			details := make([]*models.ReportTurnOverByMonth, 0, len(report.MothDetails))
 			for i := time.January; i <= time.December; i++ {
 				details = append(details, &models.ReportTurnOverByMonth{

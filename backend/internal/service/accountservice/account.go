@@ -2,8 +2,9 @@ package accountservise
 
 import (
 	"context"
-	"finance/internal/entities/accountentities"
-	"finance/internal/service"
+
+	"github.com/bhankey/BD_lab/backend/internal/entities/accountentities"
+	"github.com/bhankey/BD_lab/backend/internal/service"
 )
 
 type AccountService struct {

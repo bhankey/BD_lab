@@ -2,7 +2,8 @@ package paymentsservice
 
 import (
 	"context"
-	"finance/internal/entities/paymententities"
+
+	"github.com/bhankey/BD_lab/backend/internal/entities/paymententities"
 )
 
 func (s *PaymentsService) GetAll(ctx context.Context) ([]paymententities.Payment, error) {
@@ -15,6 +16,6 @@ func (s *PaymentsService) GetAll(ctx context.Context) ([]paymententities.Payment
 	for _, account := range accounts {
 		accountIDs = append(accountIDs, account.ID)
 	}
-	
+
 	return s.paymentsRepo.GetClientsPayments(ctx, accountIDs)
 }

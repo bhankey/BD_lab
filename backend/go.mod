@@ -1,4 +1,4 @@
-module finance
+module github.com/bhankey/BD_lab/backend
 
 go 1.16
 

@@ -1,12 +1,13 @@
 package http
 
 import (
-	"finance/pkg/logger"
-	"github.com/pborman/uuid"
-	"github.com/sirupsen/logrus"
 	"net/http"
 	"runtime/debug"
 	"time"
+
+	"github.com/bhankey/BD_lab/backend/pkg/logger"
+	"github.com/pborman/uuid"
+	"github.com/sirupsen/logrus"
 )
 
 func wrapResponseWriter(w http.ResponseWriter) *responseWriter {
@@ -25,8 +26,6 @@ func (rw *responseWriter) WriteHeader(code int) {
 	rw.status = code
 	rw.ResponseWriter.WriteHeader(code)
 	rw.wroteHeader = true
-
-	return
 }
 
 type responseWriter struct {
@@ -38,7 +37,7 @@ type responseWriter struct {
 func LoggingMiddleware(logger logger.Logger) func(http.Handler) http.Handler {
 	return func(next http.Handler) http.Handler {
 		requestID := uuid.NewUUID().String()
-		fn := func(w http.ResponseWriter, r *http.Request) {
+		f := func(w http.ResponseWriter, r *http.Request) {
 			defer func() {
 				if err := recover(); err != nil {
 					w.WriteHeader(http.StatusInternalServerError)
@@ -56,7 +55,7 @@ func LoggingMiddleware(logger logger.Logger) func(http.Handler) http.Handler {
 			start := time.Now()
 			wrapped := wrapResponseWriter(w)
 			next.ServeHTTP(wrapped, r)
-			l := logger.WithFields(logrus.Fields{
+			log := logger.WithFields(logrus.Fields{
 				"status":     wrapped.status,
 				"method":     r.Method,
 				"path":       r.URL.EscapedPath(),
@@ -65,12 +64,12 @@ func LoggingMiddleware(logger logger.Logger) func(http.Handler) http.Handler {
 			})
 
 			if wrapped.Status() != http.StatusOK {
-				l.Error("request")
+				log.Error("request")
 			} else {
-				l.Info("request")
+				log.Info("request")
 			}
 		}
 
-		return http.HandlerFunc(fn)
+		return http.HandlerFunc(f)
 	}
 }

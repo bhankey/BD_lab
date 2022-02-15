@@ -3,10 +3,11 @@ package accounthandler
 import (
 	"context"
 	"encoding/json"
-	deliveryhttp "finance/internal/delivery/http"
-	"finance/internal/delivery/http/models"
-	"github.com/go-openapi/strfmt"
 	"net/http"
+
+	deliveryhttp "github.com/bhankey/BD_lab/backend/internal/delivery/http"
+	"github.com/bhankey/BD_lab/backend/internal/delivery/http/models"
+	"github.com/go-openapi/strfmt"
 )
 
 func (s *AccountHandler) create() http.HandlerFunc {

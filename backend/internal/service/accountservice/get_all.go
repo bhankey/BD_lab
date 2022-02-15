@@ -2,7 +2,8 @@ package accountservise
 
 import (
 	"context"
-	"finance/internal/entities/accountentities"
+
+	"github.com/bhankey/BD_lab/backend/internal/entities/accountentities"
 )
 
 func (s *AccountService) GetAll(ctx context.Context) ([]accountentities.Account, error) {

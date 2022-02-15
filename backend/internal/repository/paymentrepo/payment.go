@@ -2,11 +2,12 @@ package paymentrepo
 
 import (
 	"context"
-	"finance/internal/entities/paymententities"
-	"finance/internal/repository"
 	"fmt"
-	"github.com/jmoiron/sqlx"
 	"time"
+
+	"github.com/bhankey/BD_lab/backend/internal/entities/paymententities"
+	"github.com/bhankey/BD_lab/backend/internal/repository"
+	"github.com/jmoiron/sqlx"
 )
 
 type PaymentsRepo struct {
@@ -91,7 +92,6 @@ func (r *PaymentsRepo) GetByAccountID(ctx context.Context, accountID int, year i
 
 	return result, nil
 }
-
 
 func (r *PaymentsRepo) GetAll(ctx context.Context) ([]paymententities.Payment, error) {
 	const query = `
@@ -199,4 +199,3 @@ func (r *PaymentsRepo) GetClientsPayments(ctx context.Context, accountIDs []int)
 
 	return result, nil
 }
-
