@@ -3,7 +3,8 @@ package postgresdb
 import (
 	"fmt"
 
-	_ "github.com/jackc/pgx/v4/stdlib" // driver for connection.
+	// driver for connection.
+	_ "github.com/jackc/pgx/v4/stdlib"
 	"github.com/jmoiron/sqlx"
 )
 
