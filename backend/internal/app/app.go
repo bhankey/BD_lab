@@ -35,6 +35,7 @@ type App struct {
 
 const shutDownTimeoutSeconds = 10
 
+// TODO Сделать контейнер, с помощью которого нормально прокидывать зависимости
 func NewApp(configPath string) (*App, error) {
 	config := configinternal.GetConfig(configPath)
 
@@ -59,12 +60,14 @@ func NewApp(configPath string) (*App, error) {
 
 	baseHandler := httphandler.NewHandler(log)
 
+	// TODO в хендлерах сделать инверсию зависимостей
 	accountHandler := accounthandler.NewAccountHandler(baseHandler, accountService)
 	paymentsHandler := paymentshandler.NewPaymentHandler(baseHandler, paymentsService)
 	reportsHandler := reportshandler.NewReportsHandler(baseHandler, reportsService)
 
 	swaggerHandler := swaggerhandler.NewSwaggerHandler(baseHandler)
 
+	// TODO куда-то вынести
 	router := chi.NewRouter()
 
 	router.Use(cors.Handler(cors.Options{
